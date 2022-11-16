@@ -35,7 +35,7 @@ import { findMenu } from '@/utils/tools'
 const userStore = useUserStore()
 const tagStore = tagUseStore()
 
-// 经测试a-menu的openKeys和selectedKeys不能直接与useUserStore中的openKeys和selectedKeys进行双向绑定，会无法正常显示select的菜单
+// a-menu的openKeys和selectedKeys不能直接与useUserStore中的openKeys和selectedKeys进行双向绑定
 // menu的title必须与路由中的name对应，默认情况根据当前路由的name查找当前选中的菜单
 const state = reactive({ menus: userStore.getMenuList, openKeys: [], selectedKeys: [] })
 
@@ -44,10 +44,20 @@ const openChange = (open) => {
   userStore.openKeys = state.openKeys
 }
 const select = ({ item, key, s }) => {
-  userStore.selectedKeys = state.openKeys
+  const tag = {
+    name: key,
+    meta: { ...userStore.routersMeta[key] },
+    closable: true,
+    openKeys: [...state.openKeys],
+    selectedKeys: [...state.selectedKeys]
+  }
+  userStore.selectedKeys = state.selectedKeys
+  userStore.openKeys = state.openKeys
   // 每次选中的时候，更新一次选中的菜单
+  tagStore.pushTag(tag)
+  tagStore.pushCache(tag)
+  tagStore.click(tag)
   router.push({ name: key })
-  tagStore.add({ name: key, openKeys: [...state.openKeys], selectedKeys: [...state.selectedKeys] })
 }
 onMounted(() => {
   // 初始化时，如果没有打开任何菜单的话，尝试根据当前路由的name反向查找选中的菜单
@@ -57,11 +67,22 @@ onMounted(() => {
     state.openKeys = result.open
   }
   tagStore.clean()
-  tagStore.add({ name: router.currentRoute.value.name, openKeys: [...state.openKeys], selectedKeys: [...state.selectedKeys] })
+  const tag = {
+    name: router.currentRoute.value.name,
+    meta: { ...router.currentRoute.value.meta },
+    closable: false,
+    openKeys: [...state.openKeys],
+    selectedKeys: [...state.selectedKeys]
+  }
+  tagStore.pushTag(tag)
+  tagStore.pushCache(tag)
+  tagStore.click(tag)
 })
 
 watch(() => tagStore.clickTime, (oldValue, newValue) => {
   // 监听tag导航的点击次数，如果次数有变化则表示要从store中更新
+  console.log(userStore.selectedKeys)
+  console.log(userStore.openKeys)
   state.selectedKeys = userStore.selectedKeys
   state.openKeys = userStore.openKeys
 })

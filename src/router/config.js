@@ -11,10 +11,15 @@ const defaultConfig = [
     path: '/',
     name: 'main',
     component: LayoutView,
+    redirect: '/home',
     children: [{
-      path: '/',
+      path: 'home',
       name: '首页',
-      component: () => import('@/views/HomeView.vue')
+      component: () => import('@/views/HomeView.vue'),
+      meta: {
+        componentName: 'HomeView',
+        keepAlive: true
+      }
     }]
   },
   {
@@ -24,15 +29,54 @@ const defaultConfig = [
     children: [{
       path: 'chart1',
       name: '试算性能',
-      component: () => import('@/views/ChartView1.vue')
+      component: () => import('@/views/ChartView1.vue'),
+      meta: {
+        componentName: 'ChartView1',
+        keepAlive: true
+      }
     }, {
       path: 'chart2',
       name: '预占性能',
-      component: () => import('@/views/ChartView2.vue')
+      component: () => import('@/views/ChartView2.vue'),
+      meta: {
+        componentName: 'ChartView2',
+        keepAlive: true
+      }
     }, {
       path: 'chart3',
       name: '实占性能',
-      component: () => import('@/views/ChartView3.vue')
+      children: [{
+        path: 'chart31',
+        name: '实占性能冒烟',
+        component: () => import('@/views/ChartView31.vue'),
+        meta: {
+          componentName: 'ChartView31',
+          keepAlive: true
+        }
+      },
+      {
+        path: 'chart32',
+        name: '实占性能压测',
+        component: () => import('@/views/ChartView32.vue'),
+        meta: {
+          componentName: 'ChartView32',
+          keepAlive: true
+        }
+      }]
+    }]
+  },
+  {
+    path: '/blank',
+    name: 'blank',
+    component: LayoutView,
+    children: [{
+      path: 'blank',
+      name: '空白页',
+      component: () => import('@/views/BlankView.vue'),
+      meta: {
+        componentName: 'BlankView',
+        keepAlive: false
+      }
     }]
   }
   // {

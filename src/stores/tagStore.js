@@ -5,6 +5,8 @@ export const tagUseStore = defineStore('tagStore', {
   state: () => (
     {
       tagsList: [],
+      // 需要keepAlive的
+      cachedViews: [],
       // tag点击次数
       clickTime: 0
     }),
@@ -14,44 +16,84 @@ export const tagUseStore = defineStore('tagStore', {
   actions: {
     clean () {
       this.tagsList = []
+      this.cachedViews = []
       this.clickTime = 0
     },
-    remove (name) {
-      let i = 0
-      for (const tagIndex in this.tagsList) {
-        if (this.tagsList[tagIndex].name === name) {
-          i = tagIndex
-          this.tagsList.splice(i, 1)
+    getTagIndex (tag) {
+      for (let i = 0; i < this.tagsList.length; i++) {
+        if (this.tagsList[i].name === tag.name) {
+          return i
         }
       }
-      if (this.tagsList.length === 1) {
-        this.tagsList[0].closable = false
+      return -1
+    },
+    getCacheIndex (tag) {
+      for (let i = 0; i < this.cachedViews.length; i++) {
+        if (this.cachedViews[i] === tag.meta.componentName) {
+          return i
+        }
+      }
+      return -1
+    },
+    deleteOneTag (tag) {
+      const tagIndex = this.getTagIndex(tag)
+      this.tagsList.splice(tagIndex, 1)
+    },
+    deleteOneCache (tag) {
+      console.log(this.cachedViews)
+      const index = this.getCacheIndex(tag)
+      if (index > -1) {
+        this.cachedViews.splice(index, 1)
+      }
+      console.log(this.cachedViews)
+    },
+    deleteOtherTag (tag) {
+      const index = this.getTagIndex(tag)
+      const t = this.tagsList[index]
+      t.closable = false
+      t.color = 'success'
+      t.effect = 'dark'
+      this.tagsList = [t]
+      this.cachedViews = [name]
+    },
+    deleteOtherCache (tag) {
+      this.cachedViews = [tag.meta.componentName]
+    },
+    pushTag (tag) {
+      const index = this.getTagIndex(tag)
+      if (index === -1) {
+        this.tagsList.push(tag)
       }
     },
-    add (tag) {
-      let find = false
-      for (const tagIndex in this.tagsList) {
-        if (this.tagsList[tagIndex].name === tag.name) {
-          this.tagsList[tagIndex].color = 'success'
-          find = true
-        } else {
-          this.tagsList[tagIndex].color = 'default'
-        }
+    pushCache (tag) {
+      const index = this.getCacheIndex(tag)
+      console.log(index)
+      if (index === -1) {
+        this.cachedViews.push(tag.meta.componentName)
       }
-      if (!find) {
-        this.tagsList.push({ name: tag.name, color: 'success', closable: true, openKeys: tag.openKeys, selectedKeys: tag.selectedKeys })
+      console.log(tag)
+      console.log(this.cachedViews)
+    },
+    insertTag (tag, index) {
+      const i = this.getTagIndex(tag)
+      if (i === -1) {
+        this.tagsList.splice(index, 0, tag)
+      }
+    },
+    click (tag) {
+      for (let i = 0; i < this.tagsList.length; i++) {
+        if (this.tagsList[i].name === tag.name) {
+          this.tagsList[i].color = '#1890ff'
+          this.tagsList[i].active = true
+        } else {
+          this.tagsList[i].color = 'default'
+          this.tagsList[i].active = false
+        }
       }
       this.tagsList[0].closable = this.tagsList.length !== 1
     },
-    click (name) {
+    clickTimeAdd () {
       this.clickTime++
-      for (const tagIndex in this.tagsList) {
-        if (this.tagsList[tagIndex].name === name) {
-          this.tagsList[tagIndex].color = 'success'
-        } else {
-          this.tagsList[tagIndex].color = 'default'
-        }
-      }
     }
   }
 })

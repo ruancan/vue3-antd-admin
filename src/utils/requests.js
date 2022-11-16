@@ -31,7 +31,6 @@ request.interceptors.response.use(response => {
           title: '登陆已过期',
           content: '点击确定按钮重新登陆',
           onOk () {
-            window.localStorage.clear()
             userStore.clean()
             location.reload()
           }

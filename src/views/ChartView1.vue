@@ -1,4 +1,5 @@
 <template>
+  <div><a-button @click="click">添加</a-button></div>
 <div class="chart" id="chart" style="width: 600px; height: 400px"></div>
 </template>
 
@@ -6,31 +7,18 @@
 import { onMounted } from 'vue'
 import * as echarts from 'echarts'
 
+import { chartUseStore } from '@/stores/chartStore.js'
+const chartStore = chartUseStore()
+
 onMounted(() => {
   const chart = echarts.init(document.getElementById('chart'))
-  chart.setOption({
-    title: { text: '试算性能' },
-    tooltip: {},
-    legend: {
-      data: ['事中平均值', '目前平均值']
-    },
-    xAxis: {
-      data: ['5并发', '10并发', '15并发']
-    },
-    yAxis: {},
-    series: [{
-      name: '事中平均值',
-      type: 'line',
-      stack: 'Total',
-      data: [3.958, 5.885, 10.334]
-    }, {
-      name: '目前平均值',
-      type: 'line',
-      stack: 'Total',
-      data: [1.263, 1.045, 1.923]
-    }]
-  })
+  chart.setOption(chartStore.option)
 })
+const click = () => {
+  const length = chartStore.option.xAxis.data.length
+  chartStore.option.xAxis.data.push(`${length * 5 + 5}并发`)
+  chartStore.option.series[0].data.push((Math.random() * 10) + 10)
+}
 </script>
 
 <style scoped>

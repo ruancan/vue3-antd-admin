@@ -7,15 +7,24 @@
       <a-layout-header class="layout-header">
           <header-bar></header-bar>
       </a-layout-header>
+      <tabs-bar></tabs-bar>
       <a-layout-content class="layout-content">
         <div class="tabs-container">
-          <tabs-bar></tabs-bar>
         </div>
         <div class="router-content">
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
+          <router-view v-slot="{ Component, route }">
+            <keep-alive :include="cachedViews">
+              <component
+                  :is="Component"
+                  v-if="route.meta.keepAlive"
+                  :key="route.meta.componentName"
+              />
             </keep-alive>
+            <component
+                :is="Component"
+                v-if="!route.meta.keepAlive"
+                :key="route.meta.componentName"
+            />
           </router-view>
         </div>
       </a-layout-content>
@@ -28,6 +37,14 @@
 import MenuBar from '@/components/MenuBar.vue'
 import HeaderBar from '@/components/HeaderBar.vue'
 import TabsBar from '@/components/TagsBar.vue'
+import { computed } from 'vue'
+import { tagUseStore } from '@/stores/tagStore.js'
+
+const tagStore = tagUseStore()
+
+const cachedViews = computed(() => {
+  return tagStore.cachedViews
+})
 
 </script>
 
@@ -40,19 +57,9 @@ import TabsBar from '@/components/TagsBar.vue'
   }
 
   .layout-main {
-    margin: 0 16px;
-    .layout-header {
+    .layout-header{
       background: #fff;
-    }
-    .layout-content {
-      .tabs-container {
-        padding: 2px 0;
-      }
-      .router-content{
-        padding: 0 32px;
-        background: #fff;
-        min-height:100%
-      }
+      padding: 0
     }
     .layout-footer{
       text-align: center;

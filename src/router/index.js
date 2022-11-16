@@ -9,18 +9,26 @@ const router = createRouter({
   routes: defaultConfig
 })
 
+const userRouterMeta = {}
+
 // menuList为后台回传的菜单信息,menu和router的匹配规则为menu的title对应router的name
 const routerFilter = (menuList) => {
+  // mKeyObject中是需要保留的路由
   const mKeyObject = {}
+  // 所有的一级路由都是需要保留的
   for (const item of defaultConfig) {
     mKeyObject[item.name] = ''
   }
+  // 空白页的路由也是需要保留的，用户刷新当前路由时临时跳转
+  mKeyObject['空白页'] = ''
   const rKeyObject = {}
   getAllItem(menuList, 'title', mKeyObject)
   getAllItem(defaultConfig, 'name', rKeyObject)
   for (const rKey in rKeyObject) {
     if (mKeyObject[rKey] === undefined) {
       router.removeRoute(rKey)
+    } else {
+      userRouterMeta[rKey] = rKeyObject[rKey]
     }
   }
 }
@@ -45,6 +53,7 @@ router.beforeEach((to, from, next) => {
           userStore.setStatus(true)
           userStore.setUserInfo(body)
           routerFilter(body.data.menus)
+          userStore.routersMeta = userRouterMeta
           next({ path: to.path })
         }
       })

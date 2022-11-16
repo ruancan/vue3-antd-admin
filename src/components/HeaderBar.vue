@@ -1,5 +1,8 @@
 <template>
   <div class="welcome">
+    <div style="display: flex;align-items: center;">
+    </div>
+    <div style="margin-right: 30px">
     <a-dropdown>
       <a class="ant-dropdown-link" @click.prevent>
         欢迎 {{ userStore.userInfo.nickname }} !
@@ -13,6 +16,7 @@
         </a-menu>
       </template>
     </a-dropdown>
+  </div>
   </div>
 </template>
 
@@ -36,5 +40,10 @@ const onLogout = () => {
 <style scoped>
 .welcome {
   text-align: right;
+  height:100%;
+  box-shadow: 24px 4px 29px #ccc;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

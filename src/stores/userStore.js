@@ -12,7 +12,8 @@ export const useUserStore = defineStore('useUserStore', {
       status: false,
       token: '',
       openKeys: [],
-      selectedKeys: []
+      selectedKeys: [],
+      routersMeta: {}
     }
   },
   getters: {
