@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    XXX系统
+    XXX平台 V3.0
   </div>
   <a-menu
       v-model:openKeys="state.openKeys"
@@ -10,14 +10,17 @@
       @openChange="openChange"
       @select="select"
   >
-    <template v-for="item in state.menus" :key="item.title">
-      <template v-if="!item.children">
-        <a-menu-item :key="item.title" :title="item.title">
-          {{ item.title }}
+    <template v-for="menu in state.menus" :key="menu.title">
+      <template v-if="!menu.children">
+        <a-menu-item :key="menu.title" class="father">
+          {{ menu.title }}
         </a-menu-item>
       </template>
       <template v-else>
-        <menu-bar-item :menu="item"></menu-bar-item>
+        <a-sub-menu :key="menu.title" :title="menu.title" class="father">
+          <template #title>{{ menu.title }}</template>
+          <menu-bar-item :menus="menu.children"></menu-bar-item>
+        </a-sub-menu>
       </template>
     </template>
   </a-menu>
@@ -66,7 +69,6 @@ onMounted(() => {
     state.selectedKeys = result.select
     state.openKeys = result.open
   }
-  tagStore.clean()
   const tag = {
     name: router.currentRoute.value.name,
     meta: { ...router.currentRoute.value.meta },
@@ -81,8 +83,6 @@ onMounted(() => {
 
 watch(() => tagStore.clickTime, (oldValue, newValue) => {
   // 监听tag导航的点击次数，如果次数有变化则表示要从store中更新
-  console.log(userStore.selectedKeys)
-  console.log(userStore.openKeys)
   state.selectedKeys = userStore.selectedKeys
   state.openKeys = userStore.openKeys
 })

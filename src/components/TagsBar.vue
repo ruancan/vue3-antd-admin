@@ -62,7 +62,6 @@ const onClick = (tag) => {
   if (!tag.active) {
     tagStore.click(tag)
     // 把tag的selectedKeys、openKeys更新到store中
-    console.log(tag)
     userStore.selectedKeys = [...tag.selectedKeys]
     userStore.openKeys = [...tag.openKeys]
     tagStore.clickTimeAdd()
@@ -86,7 +85,7 @@ const openMenu = (tag, e) => {
 }
 
 const refreshSelectedTag = () => {
-  console.log(state.selectedTag)
+  // console.log(state.selectedTag)
   tagStore.deleteOneCache(state.selectedTag)
   // 必须等空白页加载完毕，否则keepAlive中的缓存不会被清理掉
   router.push({ name: '空白页' }).then(() => {
@@ -123,8 +122,9 @@ watch(() => state.visible, (n, o) => {
   height: 34px;
   width: 100%;
   background: #fff;
-  border-bottom: 1px solid #d8dce5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  padding: 0 10px;
 
   .tags-view-item {
     display: inline-block;

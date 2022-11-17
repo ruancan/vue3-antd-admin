@@ -25,7 +25,7 @@ request.interceptors.response.use(response => {
   const userStore = useUserStore()
   if (res.code !== 20000) {
     if (res.code >= 50000) {
-      console.log(router.currentRoute.value.path)
+      // console.log(router.currentRoute.value.path)
       if (router.currentRoute.value.path !== '/login') {
         Modal.confirm({
           title: '登陆已过期',

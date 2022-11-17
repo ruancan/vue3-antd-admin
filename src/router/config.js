@@ -23,46 +23,39 @@ const defaultConfig = [
     }]
   },
   {
-    path: '/chart',
+    path: '/performance-chart',
     name: '报表',
     component: LayoutView,
     children: [{
-      path: 'chart1',
-      name: '试算性能',
-      component: () => import('@/views/ChartView1.vue'),
+      path: 'loginApi',
+      name: 'login接口',
+      component: () => import('@/views/chart/ChartView1.vue'),
       meta: {
         componentName: 'ChartView1',
         keepAlive: true
       }
     }, {
-      path: 'chart2',
-      name: '预占性能',
-      component: () => import('@/views/ChartView2.vue'),
+      path: 'userinfo',
+      name: 'userInfo接口',
+      component: () => import('@/views/chart/ChartView2.vue'),
       meta: {
         componentName: 'ChartView2',
         keepAlive: true
       }
-    }, {
-      path: 'chart3',
-      name: '实占性能',
-      children: [{
-        path: 'chart31',
-        name: '实占性能冒烟',
-        component: () => import('@/views/ChartView31.vue'),
-        meta: {
-          componentName: 'ChartView31',
-          keepAlive: true
-        }
-      },
-      {
-        path: 'chart32',
-        name: '实占性能压测',
-        component: () => import('@/views/ChartView32.vue'),
-        meta: {
-          componentName: 'ChartView32',
-          keepAlive: true
-        }
-      }]
+    }]
+  },
+  {
+    path: '/table',
+    name: '表格',
+    component: LayoutView,
+    children: [{
+      path: 'sample',
+      name: '表格示例',
+      component: () => import('@/views/table/SampleTable.vue'),
+      meta: {
+        componentName: 'SampleTable',
+        keepAlive: true
+      }
     }]
   },
   {
@@ -78,14 +71,13 @@ const defaultConfig = [
         keepAlive: false
       }
     }]
+  },
+  {
+    path: '/:catchAll(.*)',
+    hidden: true,
+    name: '/404',
+    component: () => import('@/views/404View.vue')
   }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (About.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import('../views/AboutView.vue')
-  // }
+
 ]
 export default defaultConfig

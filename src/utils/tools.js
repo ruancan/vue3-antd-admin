@@ -4,9 +4,13 @@ export function decode (url) {
 
 export function getAllItem (param, key, o) {
   for (const paramElement of param) {
-    o[paramElement[key]] = {
-      componentName: '',
-      keepAlive: true
+    if (paramElement.meta === undefined || paramElement.meta.length === 0) {
+      o[paramElement[key]] = {
+        componentName: '',
+        keepAlive: false
+      }
+    } else {
+      o[paramElement[key]] = paramElement.meta
     }
     if (paramElement.children) {
       getAllItem(paramElement.children, key, o)

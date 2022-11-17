@@ -1,6 +1,6 @@
 <template>
   <a-layout class="layout-container">
-    <a-layout-sider class="menu-bar">
+    <a-layout-sider class="menu-bar" width="250px">
       <menu-bar></menu-bar>
     </a-layout-sider>
     <a-layout class="layout-main">
@@ -9,8 +9,6 @@
       </a-layout-header>
       <tabs-bar></tabs-bar>
       <a-layout-content class="layout-content">
-        <div class="tabs-container">
-        </div>
         <div class="router-content">
           <router-view v-slot="{ Component, route }">
             <keep-alive :include="cachedViews">
@@ -54,6 +52,7 @@ const cachedViews = computed(() => {
 
   .menu-bar {
     overflow-y: auto;
+
   }
 
   .layout-main {
@@ -63,6 +62,12 @@ const cachedViews = computed(() => {
     }
     .layout-footer{
       text-align: center;
+    }
+    .router-content{
+      padding: 20px;
+      min-height: 100%;
+      //box-shadow: 24px 4px 29px #ccc;
+      background: #fff;
     }
   }
 }

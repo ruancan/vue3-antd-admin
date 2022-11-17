@@ -40,12 +40,10 @@ export const tagUseStore = defineStore('tagStore', {
       this.tagsList.splice(tagIndex, 1)
     },
     deleteOneCache (tag) {
-      console.log(this.cachedViews)
       const index = this.getCacheIndex(tag)
       if (index > -1) {
         this.cachedViews.splice(index, 1)
       }
-      console.log(this.cachedViews)
     },
     deleteOtherTag (tag) {
       const index = this.getTagIndex(tag)
@@ -67,12 +65,9 @@ export const tagUseStore = defineStore('tagStore', {
     },
     pushCache (tag) {
       const index = this.getCacheIndex(tag)
-      console.log(index)
       if (index === -1) {
         this.cachedViews.push(tag.meta.componentName)
       }
-      console.log(tag)
-      console.log(this.cachedViews)
     },
     insertTag (tag, index) {
       const i = this.getTagIndex(tag)
