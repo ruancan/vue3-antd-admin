@@ -27,8 +27,8 @@ export default [
         message: null,
         result: null,
         data: {
-          nickname: 'ruanbinbin',
-          username: 'ruanbinbin',
+          nickname: 'ruancan',
+          username: 'ruancan',
           email: '85345902@qq.com',
           token: 'ZjExZWJlMzMtY2Y4My00MzRhLWEyOGUtZDY3ZTE2NDY5Yjdh',
           menuElements: null,
